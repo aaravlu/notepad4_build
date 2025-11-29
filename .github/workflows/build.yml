@@ -35,39 +35,36 @@ jobs:
           arch: x64
           sdk: 10.0.19041.0
 
-      - name: Checkout self
-        uses: actions/checkout@v4
-
-      - name: Checkout gitoxide
-        uses: actions/checkout@v4
+      - name: Checkout notepad4
+        uses: actions/checkout@v6
         with:
-          repository: GitoxideLabs/gitoxide
-          ref: refs/tags/v0.47.0
-          path: gitoxide
+          repository: zufuliu/notepad4
+          ref: refs/tags/v25.11r5880
+          path: notepad4
 
-      - name: Copy config file
-        shell: bash
+      - name: Update Version Hash
         run: |
-          mkdir -p gitoxide/.cargo
-          cp -f .cargo/config.toml gitoxide/.cargo
+          cd notepad4
+          "c:/Program Files/Git/usr/bin/sed" -i "s/^\(.\+\)[0-9a-f]\{8\}\(.\+\)$/\1%GITHUB_SHA:~0,8%\2/gm" ./src/VersionRev.h ./matepath/src/VersionRev.h
 
-      - name: Build
-        shell: pwsh
+      - name: AVX2
         run: |
-          cd gitoxide
-          Remove-Item -Force Cargo.lock
-          cargo update
-          cargo b -r
+          msbuild Notepad4.sln `
+          /p:Configuration=AVX2Release `
+          /p:Platform=x64 `
+          /p:PlatformToolset=v142 `
+          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
+          /p:WholeProgramOptimization=true `
+          /p:Optimization=MinSpace `
+          /p:FunctionLevelLinking=true
 
-      - name: Archive
-        uses: actions/upload-artifact@v4
-        with:
-          name: gitoxide_${{ matrix.os }}
-          path: |
-            gitoxide/target/release/*.exe
-
-            gitoxide/target/release/ein
-            gitoxide/target/release/gix
-
-            gitoxide/target/release/*.dll
-            gitoxide/target/release/*.so
+      - name: AVX512
+        run: |
+          msbuild Notepad4.sln `
+          /p:Configuration=AVX512Release `
+          /p:Platform=x64 `
+          /p:PlatformToolset=v142 `
+          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
+          /p:WholeProgramOptimization=true `
+          /p:Optimization=MinSpace `
+          /p:FunctionLevelLinking=true
