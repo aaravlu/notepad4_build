@@ -59,14 +59,22 @@ jobs:
           /p:Optimization=MinSpace `
           /p:FunctionLevelLinking=true
 
-      - name: AVX512
-        working-directory: "notepad4/build/VisualStudio"
-        run: |
-          msbuild Notepad4.sln `
-          /p:Configuration=AVX512Release `
-          /p:Platform=x64 `
-          /p:PlatformToolset=v142 `
-          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
-          /p:WholeProgramOptimization=true `
-          /p:Optimization=MinSpace `
-          /p:FunctionLevelLinking=true
+      - name: Archive binaries
+        uses: actions/upload-artifact@v5
+        with:
+          name: notepad4
+          path: |
+            notepad4/build/**/*.exe
+            notepad4/build/**/*.dll
+
+      # - name: AVX512
+      #   working-directory: "notepad4/build/VisualStudio"
+      #   run: |
+      #     msbuild Notepad4.sln `
+      #     /p:Configuration=AVX512Release `
+      #     /p:Platform=x64 `
+      #     /p:PlatformToolset=v142 `
+      #     /p:WindowsTargetPlatformVersion=10.0.19041.0 `
+      #     /p:WholeProgramOptimization=true `
+      #     /p:Optimization=MinSpace `
+      #     /p:FunctionLevelLinking=true
