@@ -45,9 +45,9 @@ jobs:
       - name: Build
         working-directory: "notepad4/build/VisualStudio"
         run: |
-          $commonArgs = "Notepad4.sln /p:Platform=x64 /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0.19041.0 /p:WholeProgramOptimization=true /p:Optimization=MinSpace /p:FunctionLevelLinking=true"
-          msbuild $commonArgs /p:Configuration=AVX2Release
-          msbuild $commonArgs /p:Configuration=AVX512Release
+          $commonArgs = @("Notepad4.sln", "/p:Platform=x64", "/p:PlatformToolset=v142", "/p:WindowsTargetPlatformVersion=10.0.19041.0", "/p:WholeProgramOptimization=true", "/p:Optimization=MinSpace", "/p:FunctionLevelLinking=true")
+          msbuild @commonArgs /p:Configuration=AVX2Release
+          msbuild @commonArgs /p:Configuration=AVX512Release
 
       - name: Archive AVX2
         uses: actions/upload-artifact@v5
