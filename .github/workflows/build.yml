@@ -42,39 +42,39 @@ jobs:
           ref: refs/tags/v25.11r5880
           path: notepad4
 
-      # - name: Update Version Hash
-      #   run: |
-      #     cd notepad4
-      #     "c:/Program Files/Git/usr/bin/sed" -i "s/^\(.\+\)[0-9a-f]\{8\}\(.\+\)$/\1%GITHUB_SHA:~0,8%\2/gm" ./src/VersionRev.h ./matepath/src/VersionRev.h
-
-      - name: AVX2
+      - name: AVX2 & AVX512
         working-directory: "notepad4/build/VisualStudio"
         run: |
           msbuild Notepad4.sln `
-          /p:Configuration=AVX2Release `
           /p:Platform=x64 `
           /p:PlatformToolset=v142 `
           /p:WindowsTargetPlatformVersion=10.0.19041.0 `
           /p:WholeProgramOptimization=true `
           /p:Optimization=MinSpace `
           /p:FunctionLevelLinking=true
+          /p:Configuration=AVX2Release `
 
-      - name: Archive binaries
+          msbuild Notepad4.sln `
+          /p:Platform=x64 `
+          /p:PlatformToolset=v142 `
+          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
+          /p:WholeProgramOptimization=true `
+          /p:Optimization=MinSpace `
+          /p:FunctionLevelLinking=true
+          /p:Configuration=AVX512Release `
+
+      - name: Archive AVX2
         uses: actions/upload-artifact@v5
         with:
-          name: notepad4
+          name: notepad4_avx2
           path: |
-            notepad4/build/**/*.exe
-            notepad4/build/**/*.dll
+            notepad4/build/bin/Release/AVX2/**/*.exe
+            notepad4/build/bin/Release/AVX2/**/*.dll
 
-      # - name: AVX512
-      #   working-directory: "notepad4/build/VisualStudio"
-      #   run: |
-      #     msbuild Notepad4.sln `
-      #     /p:Configuration=AVX512Release `
-      #     /p:Platform=x64 `
-      #     /p:PlatformToolset=v142 `
-      #     /p:WindowsTargetPlatformVersion=10.0.19041.0 `
-      #     /p:WholeProgramOptimization=true `
-      #     /p:Optimization=MinSpace `
-      #     /p:FunctionLevelLinking=true
+      - name: Archive AVX512
+        uses: actions/upload-artifact@v5
+        with:
+          name: notepad4__avx512
+          path: |
+            notepad4/build/bin/Release/AVX512/**/*.exe
+            notepad4/build/bin/Release/AVX512/**/*.dll
