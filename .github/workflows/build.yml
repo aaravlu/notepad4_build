@@ -42,26 +42,12 @@ jobs:
           ref: refs/tags/v25.11r5880
           path: notepad4
 
-      - name: AVX2 & AVX512
+      - name: Build
         working-directory: "notepad4/build/VisualStudio"
         run: |
-          msbuild Notepad4.sln `
-          /p:Platform=x64 `
-          /p:PlatformToolset=v142 `
-          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
-          /p:WholeProgramOptimization=true `
-          /p:Optimization=MinSpace `
-          /p:FunctionLevelLinking=true
-          /p:Configuration=AVX2Release `
-
-          msbuild Notepad4.sln `
-          /p:Platform=x64 `
-          /p:PlatformToolset=v142 `
-          /p:WindowsTargetPlatformVersion=10.0.19041.0 `
-          /p:WholeProgramOptimization=true `
-          /p:Optimization=MinSpace `
-          /p:FunctionLevelLinking=true
-          /p:Configuration=AVX512Release `
+          $commonArgs = "Notepad4.sln /p:Platform=x64 /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0.19041.0 /p:WholeProgramOptimization=true /p:Optimization=MinSpace /p:FunctionLevelLinking=true"
+          msbuild $commonArgs /p:Configuration=AVX2Release
+          msbuild $commonArgs /p:Configuration=AVX512Release
 
       - name: Archive AVX2
         uses: actions/upload-artifact@v5
@@ -74,7 +60,7 @@ jobs:
       - name: Archive AVX512
         uses: actions/upload-artifact@v5
         with:
-          name: notepad4__avx512
+          name: notepad4_avx512
           path: |
             notepad4/build/bin/Release/AVX512/**/*.exe
             notepad4/build/bin/Release/AVX512/**/*.dll
