@@ -39,10 +39,10 @@ jobs:
           ref: refs/tags/v25.11r5880
           path: notepad4
 
-      - name: Update Version Hash
-        run: |
-          cd notepad4
-          "c:/Program Files/Git/usr/bin/sed" -i "s/^\(.\+\)[0-9a-f]\{8\}\(.\+\)$/\1%GITHUB_SHA:~0,8%\2/gm" ./src/VersionRev.h ./matepath/src/VersionRev.h
+      # - name: Update Version Hash
+      #   run: |
+      #     cd notepad4
+      #     "c:/Program Files/Git/usr/bin/sed" -i "s/^\(.\+\)[0-9a-f]\{8\}\(.\+\)$/\1%GITHUB_SHA:~0,8%\2/gm" ./src/VersionRev.h ./matepath/src/VersionRev.h
 
       - name: AVX2
         run: |
