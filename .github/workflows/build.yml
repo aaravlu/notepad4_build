@@ -24,6 +24,9 @@ jobs:
           }
           echo "Removed link.exe in git"
 
+      - name: Setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
       - name: Setup MSVC
         if: matrix.os == 'windows-2022'
         uses: ilammy/msvc-dev-cmd@v1
